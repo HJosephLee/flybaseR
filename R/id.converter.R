@@ -1,17 +1,21 @@
 #' Converting or Updating FlyBase IDs or Symbols
 #'
-#' The function takes FlyBase IDs (e.g. FBgn#######) or Gene symbols as an input, and converts it into updated IDs or symbols.
-#' The function accesses FlyBase, so requires internet-connection.  FlyBase ID inputs are bundled as 1,000.  Symbols are 100.
+#' The function takes FlyBase IDs (e.g. FBgn0000003) or Gene symbols as an input, and converts it into updated IDs or symbols.
+#' The function accesses FlyBase, so requires internet-connection.  FlyBase ID inputs are bundled as 1,000.  100 for symbols.
 #' FlyBase IDs for genes that are split into multiple genes will be concatenated with two colons (::).  Genes that does not have matching IDs will be shown as "unknown".
 #' Note: Certain gene symbols would appear as "unknown" even if the gene exists, and have FlyBase IDs. This is because the ID converter in FlyBase website cannot convert the gene.  For example, CG31976 cannot be converted by FlyBase, although you can find the gene from Jump2Genes. 
 
 #' @param x a vector. FlyBase IDs or names to be converted.
 #' @param output Output-types in either FlyBase IDs or symbols. "Name", "Symbol", "n", or "s" produces gene symbols as an output.  FlyBase IDs for any other characters. Default="fbid" (FlyBase IDs).  
+#' @param bundle.size The number of FlyBase IDs or symbols to be submitted to FlyBase at once. Default is 1,000 if there are less than 100 symbols.  100 if more than 1,000 symbols.  Reduce the number down if Timeout error occurs.
 #' @param DmelOnly if True, non-melanogaster gene IDs will be ignored.  Default = T.
+#' @param be.polite Numeric.  Intervals between FlyBase access for each bundle as seconds.  Default = 0.
 #' @keywords flybase
 #' @export
 #' @examples
-#' id.converter(x, output="symbol", DmelOnly=T)
+#' id.converter(x, output="symbol")
+#' id.converter(x, output="fbid", bundle.size = 50, be.polite = 10)
+
 
 id.converter <- function(x, output, DmelOnly){
       
@@ -42,10 +46,17 @@ id.converter <- function(x, output, DmelOnly){
             }
       }
       
+      if ( missing(bundle.size) ){
+            if ( length(x[ !grepl("FBgn", x)]) >= 100 ){ bundle.size <- 100 } else { bundle.size <- 1000 }
+      }
       
       if ( missing(DmelOnly) ){
             DmelOnly <- T
             message("non-melanogaster IDs and Symbols will be ignored.")
+      }
+      
+      if ( missing(be.polite) ){
+            be.polite <- 0
       }
       
       
@@ -56,16 +67,14 @@ id.converter <- function(x, output, DmelOnly){
       session <- html_session("http://flybase.org/convert/id")
       form <- html_form(session)[[2]]
       
-      if ( length(x[ !grepl("FBgn", x)]) >= 100 ){ bundle <- 100 } else { bundle <- 1000 }
-       
-      for (i in 1:ceiling(length(x)/bundle)){
+      for (i in 1:ceiling(length(x)/bundle.size)){
             
-            if (i != ceiling(length(x)/bundle)){ temp.x <- as.character(x[ (bundle*(i-1)+1):(bundle*i) ])
+            if (i != ceiling(length(x)/bundle.size)){ temp.x <- as.character(x[ (bundle.size*(i-1)+1):(bundle.size*i) ])
             } else {
-                  temp.x <- as.character(x[ (bundle*(i-1)+1):length(x) ])
+                  temp.x <- as.character(x[ (bundle.size*(i-1)+1):length(x) ])
             }
             
-            message(paste("Processing ", prettyNum(min((bundle*i), length(x)), big.mark=",", big.interval=3), " genes out of ", prettyNum(length(x), big.mark=",", big.interval=3), sep=""))
+            message(paste("Processing ", prettyNum(min((bundle.size*i), length(x)), big.mark=",", big.interval=3), " genes out of ", prettyNum(length(x), big.mark=",", big.interval=3), sep=""))
             
             form <- set_values(form, ids = paste(as.character(temp.x), collapse = "\n"))
             conversion.table <- html_table(suppressMessages(submit_form(session, form)))[[1]]
@@ -90,6 +99,9 @@ id.converter <- function(x, output, DmelOnly){
             temp.result <- gsub("unknown::", "", gsub("::unknown", "", temp.result, fixed = T), fixed=T) # when more than 2 genes are concatenaterd with an unknown, remove the unknown tag. 
             
             if ( i == 1 ){ result <- temp.result } else { result <- c(result, temp.result) }
+            
+            # being polite.
+            Sys.sleep(time=as.numeric(be.polite))
             
       } # for i
       
