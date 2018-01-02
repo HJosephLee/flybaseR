@@ -35,7 +35,7 @@ j2g <- function(x, n){
       form <- html_form(session)[[1]]
       
       for (i in 1:as.character(x)){
-            result <- suppressMessages(submit_(session, set_values(form, context = i)))
+            result <- suppressMessages(submit_form(session, set_values(form, context = i)))
             browseURL(url = result$url)
       }
       
