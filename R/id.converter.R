@@ -56,9 +56,8 @@ id.converter <- function(x, output, DmelOnly){
       session <- html_session("http://flybase.org/convert/id")
       form <- html_form(session)[[2]]
       
-      
-      if (output.type == "fbid"){ bundle <- 1000 } else { bundle <- 100 }
-      
+      if ( length(x[ !grepl("FBgn", x)]) >= 100 ){ bundle <- 100 } else { bundle <- 1000 }
+       
       for (i in 1:ceiling(length(x)/bundle)){
             
             if (i != ceiling(length(x)/bundle)){ temp.x <- as.character(x[ (bundle*(i-1)+1):(bundle*i) ])
