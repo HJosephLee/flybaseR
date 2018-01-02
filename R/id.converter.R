@@ -17,7 +17,7 @@
 #' id.converter(x, output="fbid", bundle.size = 50, be.polite = 10)
 
 
-id.converter <- function(x, output, DmelOnly){
+id.converter <- function(x, output, bundle.size, DmelOnly, be.polite){
       
       if ( !requireNamespace("rvest", quietly = T) ) {
             stop("'rvest' package should be installed.", call. = F)
