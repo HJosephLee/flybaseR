@@ -12,14 +12,19 @@ id.converter(x, output, DmelOnly)
 \item{output}{Output-types in either FlyBase IDs or symbols. "Name", "Symbol", "n", or "s" produces gene symbols as an output.  FlyBase IDs for any other characters. Default="fbid" (FlyBase IDs).}
 
 \item{DmelOnly}{if True, non-melanogaster gene IDs will be ignored.  Default = T.}
+
+\item{bundle.size}{The number of FlyBase IDs or symbols to be submitted to FlyBase at once. Default is 1,000 if there are less than 100 symbols.  100 if more than 1,000 symbols.  Reduce the number down if Timeout error occurs.}
+
+\item{be.polite}{Numeric.  Intervals between FlyBase access for each bundle as seconds.  Default = 0.}
 }
 \description{
-The function takes FlyBase IDs (e.g. FBgn#######) or Gene symbols as an input, and converts it into updated IDs or symbols.
-The function accesses FlyBase, so requires internet-connection.  FlyBase ID inputs are bundled as 1,000.  Symbols are 100.
+The function takes FlyBase IDs (e.g. FBgn0000003) or Gene symbols as an input, and converts it into updated IDs or symbols.
+The function accesses FlyBase, so requires internet-connection.  FlyBase ID inputs are bundled as 1,000.  100 for symbols.
 FlyBase IDs for genes that are split into multiple genes will be concatenated with two colons (::).  Genes that does not have matching IDs will be shown as "unknown".
 Note: Certain gene symbols would appear as "unknown" even if the gene exists, and have FlyBase IDs. This is because the ID converter in FlyBase website cannot convert the gene.  For example, CG31976 cannot be converted by FlyBase, although you can find the gene from Jump2Genes.
 }
 \examples{
-id.converter(x, output="symbol", DmelOnly=T)
+id.converter(x, output="symbol")
+id.converter(x, output="fbid", bundle.size = 50, be.polite = 10)
 }
 \keyword{flybase}
