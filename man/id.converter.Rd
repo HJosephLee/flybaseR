@@ -4,16 +4,16 @@
 \alias{id.converter}
 \title{Converting or Updating FlyBase IDs or Symbols}
 \usage{
-id.converter(x, output, DmelOnly)
+id.converter(x, output = "fbid", bundle.size = 1000, DmelOnly = T, be.polite = 0)
 }
 \arguments{
 \item{x}{a vector. FlyBase IDs or names to be converted.}
 
 \item{output}{Output-types in either FlyBase IDs or symbols. "Name", "Symbol", "n", or "s" produces gene symbols as an output.  FlyBase IDs for any other characters. Default="fbid" (FlyBase IDs).}
 
-\item{DmelOnly}{if True, non-melanogaster gene IDs will be ignored.  Default = T.}
-
 \item{bundle.size}{The number of FlyBase IDs or symbols to be submitted to FlyBase at once. Default is 1,000 if there are less than 100 symbols.  100 if more than 1,000 symbols.  Reduce the number down if Timeout error occurs.}
+
+\item{DmelOnly}{if True, non-melanogaster gene IDs will be ignored.  Default = T.}
 
 \item{be.polite}{Numeric.  Intervals between FlyBase access for each bundle as seconds.  Default = 0.}
 }
