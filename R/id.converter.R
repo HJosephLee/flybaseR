@@ -34,7 +34,7 @@ id.converter <- function(x, output, DmelOnly){
             message("FlyBase IDs or Gene Symbols will be updated to the most recent version of FlyBase IDs..")
       }
       
-      if ( toupper(output) == "N" | toupper(output) == "NAME" | toupper(output) == "S" | toupper(output) == "SYMBOL" ){
+      if ( !missing(output) & (toupper(output) == "N" | toupper(output) == "NAME" | toupper(output) == "S" | toupper(output) == "SYMBOL" ) ){
             output.type <- "symbol"
             message("FlyBase IDs or Gene Symbols will be updated to the most recent version of Gene Symbols..")
       } else {
