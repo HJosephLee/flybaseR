@@ -11,7 +11,7 @@
 #' @export
 #' @examples
 #' id.converter2(x, version=6.12)
-#' #' id.converter2(x, version="FB2016_04", thread=4)
+#' id.converter2(x, version="FB2016_04", thread=4)
 
 id.converter2 <- function(x, version, thread){
       
