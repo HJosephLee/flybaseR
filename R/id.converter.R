@@ -10,7 +10,7 @@
 #' @param bundle.size Numeric.  The number of FlyBase IDs or symbols to be submitted to FlyBase at once. Default is 1,000 if there are less than 100 symbols; 100 if more than 1,000 symbols.  Reduce the number down if Timeout error occurs.
 #' @param DmelOnly Logical.  If TRUE, non-melanogaster gene IDs will be ignored.  Default = T.
 #' @param polite.access Numeric.  Intervals between FlyBase access for each bundle as seconds.  Default = 0.
-#' @param diehard.symbols Logical.  If TRUE, ntervals between FlyBase access for each bundle as seconds.  Default = F.
+#' @param diehard.symbols Logical.  If TRUE, gene symbols that cannot be converted by the FlyBase converter will be searched through FlyBase gene reports one by one.  The process is very slow.  Default = F.
 #' @keywords flybase
 #' @export
 #' @examples
