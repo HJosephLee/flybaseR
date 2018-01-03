@@ -15,7 +15,7 @@ id.converter(x, symbols = F, bundle.size = 1000, DmelOnly = T, polite.access = 0
 
 \item{polite.access}{Numeric.  Intervals between FlyBase access for each bundle as seconds.  Default = 0.}
 
-\item{diehard.symbols}{Logical.  If TRUE, ntervals between FlyBase access for each bundle as seconds.  Default = 0.}
+\item{diehard.symbols}{Logical.  If TRUE, ntervals between FlyBase access for each bundle as seconds.  Default = F.}
 }
 \description{
 The function takes FlyBase IDs (e.g. FBgn0000003) or Gene symbols as an input, and converts it into updated IDs or symbols using the FlyBase ID converter (web).
