@@ -7,8 +7,9 @@
 #' @export
 #' @examples
 #' j2g("e2f")
-#' j2g(c("e2f", "e2f2", "dsx"))
-#' j2g(c("FBgn0000504"))
+#' j2g(c("ovo", "otu"))
+#' j2g("FBgn0000504")
+#' j2g(c("FBgn0000504", "tra"))
 
 
 j2g <- function(x, n){
