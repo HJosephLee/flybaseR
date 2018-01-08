@@ -15,7 +15,9 @@ id.converter(x, symbols = F, bundle.size = 1000, DmelOnly = T, polite.access = 0
 
 \item{polite.access}{Numeric.  Intervals between FlyBase access for each bundle as seconds.  Default = 0.}
 
-\item{diehard.symbols}{Logical.  If TRUE, gene symbols that cannot be converted by the FlyBase converter will be searched through FlyBase gene reports one by one.  The process is very slow.  Default = F.}
+\item{diehard.symbols}{Logical.  If TRUE, ntervals between FlyBase access for each bundle as seconds.  Default = 0.}
+
+\item{convert.into}{"genes", "transcripts", or "polypeptides". "g", "t", or "p" is also possible. If missing, the IDs will be updated to the most recent IDs only.}
 }
 \description{
 The function takes FlyBase IDs (e.g. FBgn0000003) or Gene symbols as an input, and converts it into updated IDs or symbols using the FlyBase ID converter (web).
@@ -25,8 +27,8 @@ Certain gene symbols would appear as "unknown" even if the gene exists, and have
 }
 \examples{
 id.converter(x, symbols = T)
-id.converter(x, bundle.size = 50, be.polite = 10)
+id.converter(x, bundle.size = 50, be.polite = 10, convert.into = "transcripts")
 id.converter(x, symbols = T, bundle.size = 50, diehard.symbols = T)
 }
 \keyword{flybase}
-
+  
