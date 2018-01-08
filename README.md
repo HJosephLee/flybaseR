@@ -1,6 +1,8 @@
-# flybaseR
+# install
 
 devtools::install_github('hangnoh/flybaseR')
+
+
 
 # id.converter
 Converting or Updating FlyBase IDs or Symbols
@@ -29,6 +31,7 @@ id.converter(x, bundle.size = 50, be.polite = 10, convert.into = "transcripts")
 id.converter(x, symbols = T, bundle.size = 50, diehard.symbols = T)
 
 
+
 # id.converter2
 Updating FlyBase IDs to a certain version.
 
@@ -49,6 +52,7 @@ Examples
 
 id.converter2(x, version=6.12)
 id.converter2(x, version="FB2016_04", thread=4)
+
 
 
 # j2g
