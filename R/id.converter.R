@@ -10,16 +10,17 @@
 #' @param bundle.size Numeric.  The number of FlyBase IDs or symbols to be submitted to FlyBase at once. Default is 1,000 if there are less than 100 symbols; 100 if more than 1,000 symbols.  Reduce the number down if Timeout error occurs.
 #' @param DmelOnly Logical.  If TRUE, non-melanogaster gene IDs will be ignored.  Default = T.
 #' @param polite.access Numeric.  Intervals between FlyBase access for each bundle as seconds.  Default = 0.
-#' @param diehard.symbols Logical.  If TRUE, gene symbols that cannot be converted by the FlyBase converter will be searched through FlyBase gene reports one by one.  The process is very slow.  Default = F.
+#' @param diehard.symbols Logical.  If TRUE, ntervals between FlyBase access for each bundle as seconds.  Default = 0.
+#' @param convert.into "genes", "transcripts", or "polypeptides". "g", "t", or "p" is also possible. If missing, the IDs will be updated to the most recent IDs only.
 #' @keywords flybase
 #' @export
 #' @examples
 #' id.converter(x, symbols = T)
-#' id.converter(x, bundle.size = 50, be.polite = 10)
+#' id.converter(x, bundle.size = 50, be.polite = 10, convert.into = "transcripts")
 #' id.converter(x, symbols = T, bundle.size = 50, diehard.symbols = T)
 
 
-id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, diehard.symbols){
+id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, diehard.symbols, convert.into){
       
       if ( !requireNamespace("rvest", quietly = T) ) {
             stop("'rvest' package should be installed.", call. = F)
@@ -68,7 +69,7 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
       #################################################
       
       session <- html_session("http://flybase.org/convert/id")
-      form <- html_form(session)[[2]]
+      form.original <- html_form(session)[[2]]
       
       for (i in 1:ceiling(length(x)/bundle.size)){
             
@@ -79,7 +80,21 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
             
             message(paste("Processing ", prettyNum(min((bundle.size*i), length(x)), big.mark=",", big.interval=3), " genes out of ", prettyNum(length(x), big.mark=",", big.interval=3), sep=""))
             
-            form <- set_values(form, ids = paste(as.character(temp.x), collapse = "\n"))
+            if ( missing(convert.into) | toupper(convert.into) %in% c( "G", "GENE", "GENES", "T", "TRANSCRIPT", "TRANSCRIPTS", "RNA", "P", "POLYPEPTIDE", "POLYPEPTIDES", "PROTEIN", "PROTEINS" ) == F ){
+                  form <- set_values(form.original, ids = paste(as.character(temp.x), collapse = "\n"))
+            } else {
+                  if ( toupper(convert.into) %in% c( "G", "GENE", "GENES" ) ){
+                        form <- set_values(form.original, ids = paste(as.character(temp.x), collapse = "\n"), mode = "convert", convert = "fbgn")
+                  }
+                  if ( toupper(convert.into) %in% c( "T", "TRANSCRIPT", "TRANSCRIPTS", "RNA" ) ){
+                        form <- set_values(form.original, ids = paste(as.character(temp.x), collapse = "\n"), mode = "convert", convert = "fbtr")
+                  }
+                  if ( toupper(convert.into) %in% c( "P", "POLYPEPTIDE", "POLYPEPTIDES", "PROTEIN", "PROTEINS" )){
+                        form <- set_values(form.original, ids = paste(as.character(temp.x), collapse = "\n"), mode = "convert", convert = "fbpp")
+                  }
+            }
+            
+            
             conversion.table <- html_table(suppressMessages(submit_form(session, form)))[[1]]
             conversion.table <- conversion.table[-1, ]
             colnames(conversion.table) <- c("submitted", "current", "converted", "symbols")
@@ -169,7 +184,7 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
       # Reporting
       ############################
       
-      message(paste("Total # of ID mismatches : ", length(setdiff(x, result)), " (will show no match if ID -> symbol conversion)" , sep=""))
+      message(paste("Total # of ID mismatches : ", length(setdiff(x, result)), " (will show no match if ID -> symbol or gene -> protein conversion)" , sep=""))
       message(paste("Total # unknowns : ", length(result[ result == "unknown" ]), sep=""))
       message(paste("Total # split IDs : ", length(result[ grepl("::", result) ]), sep=""))
       message(paste("Total # duplicated or merged IDs : ", length(result[ duplicated(result) & result != "unknown" ]), sep=""))
