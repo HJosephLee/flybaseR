@@ -41,9 +41,9 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
       } 
       
       if (symbols == F){
-            message("FlyBase IDs or Gene Symbols will be updated to the most recent version of FlyBase IDs..")
+            message("The result will have the most recent version of FlyBase IDs.")
       } else {
-            message("FlyBase IDs or Gene Symbols will be updated to the most recent version of Gene Symbols..") 
+            message("The result will have the most recent version of Gene Symbols.") 
       }
 
       if ( missing(bundle.size) ){
