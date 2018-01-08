@@ -15,8 +15,7 @@ id.converter(x, symbols = F, bundle.size = 1000, DmelOnly = T, polite.access = 0
 
 \item{polite.access}{Numeric.  Intervals between FlyBase access for each bundle as seconds.  Default = 0.}
 
-\item{diehard.symbols}{Logical.  If TRUE, gene symbols that are not automatically converted by the FlyBase ID converter, will be searched from gene reports to find out the most matching genes.  Default = F.
-  Default = 0.}
+\item{diehard.symbols}{Logical.  If TRUE, gene symbols that are not automatically converted by the FlyBase ID converter, will be searched from gene reports to find out the most matching genes.  Default = F.}
 
 \item{convert.into}{"genes", "transcripts", or "polypeptides". "g", "t", or "p" is also possible. If missing, the IDs will be updated to the most recent IDs only.}
 }
