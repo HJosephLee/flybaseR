@@ -2,7 +2,7 @@
 \alias{id.converter}
 \title{Converting or Updating FlyBase IDs or Symbols}
 \usage{
-id.converter(x, symbols = F, bundle.size = 1000, DmelOnly = T, polite.access = 0, diehard.symbols = F)
+id.converter(x, symbols = F, bundle.size = 1000, DmelOnly = T, polite.access = 0, diehard.symbols = F, convert.into)
 }
 \arguments{
 \item{x}{a vector. FlyBase IDs or names to be converted.}
