@@ -37,7 +37,7 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
       }
       
       if ( missing(symbols) ){
-            symbols <- "F"
+            symbols <- F
       } 
       
       if (symbols == F){
