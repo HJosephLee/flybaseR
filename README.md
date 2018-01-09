@@ -1,4 +1,4 @@
-# install
+# to install
 
 devtools::install_github('hangnoh/flybaseR')
 
