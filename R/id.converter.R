@@ -3,7 +3,8 @@
 #' The function takes FlyBase IDs (e.g. FBgn0000003) or Gene symbols as an input, and converts it into updated IDs or symbols using the FlyBase ID converter (web).
 #' The function accesses FlyBase, so requires internet-connection.  FlyBase ID inputs are bundled as 1,000.  100 for symbols.
 #' FlyBase IDs for genes that are split into multiple genes will be concatenated with two colons (::).  Genes that does not have matching IDs will be shown as "unknown".
-#' Certain gene symbols would appear as "unknown" even if the gene exists, and have FlyBase IDs. This is because the ID converter in FlyBase website cannot convert the gene.  For example, CG31976 cannot be converted by FlyBase, although you can find the gene from the gene report.  Setting diehard.symbols = T will look for gene report pages of such unconvertible genes one by one.  The process is essentially slow because it accesses FlyBase for each gene. 
+#' Certain gene symbols would appear as "unknown" even if the gene exists, and have FlyBase IDs. This is because the ID converter in FlyBase website cannot convert the gene.  For example, CG31976 cannot be converted by FlyBase, although you can find the gene from the gene report.  
+#' Setting diehard.symbols = T will look for gene report pages of such unconvertible genes one by one.  The process is essentially slow because it accesses FlyBase for each gene. 
 
 #' @param x a vector. FlyBase IDs or names to be converted.
 #' @param symbols Logical.  If TRUE, the output will be gene symbols, rather than FlyBase IDs.  Default = F
@@ -11,12 +12,12 @@
 #' @param DmelOnly Logical.  If TRUE, non-melanogaster gene IDs will be ignored.  Default = T.
 #' @param polite.access Numeric.  Intervals between FlyBase access for each bundle as seconds.  Default = 0.
 #' @param diehard.symbols Logical.  If TRUE, gene symbols that are not automatically converted by the FlyBase ID converter, will be searched from gene reports to find out the most matching genes.  Default = F.
-#' @param convert.into "genes", "transcripts", or "polypeptides". "g", "t", or "p" is also possible. If missing, the IDs will be updated to the most recent IDs only.
+#' @param convert.into "genes", "transcripts", or "polypeptides". "g", "t", or "p" is also possible. If missing, inputs will be updated to the most recent IDs only.
 #' @keywords flybase
 #' @export
 #' @examples
 #' id.converter(x, symbols = T)
-#' id.converter(x, bundle.size = 50, be.polite = 10, convert.into = "transcripts")
+#' id.converter(x, bundle.size = 50, polite.access = 10, convert.into = "transcripts")
 #' id.converter(x, symbols = T, bundle.size = 50, diehard.symbols = T)
 
 
