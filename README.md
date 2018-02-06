@@ -18,7 +18,7 @@ id.converter(x, symbols = F, bundle.size = 1000, DmelOnly = T, polite.access = 0
 ```
 
 Arguments
-```
+
 - x: *a vector.* FlyBase IDs or names to be converted.
 - symbols: *Logical.* If TRUE, the output will be gene symbols, rather than FlyBase IDs. Default = F
 - bundle.size: *Numeric.* The number of FlyBase IDs or symbols to be submitted to FlyBase at once. 
@@ -29,7 +29,7 @@ Arguments
 - diehard.symbols: *Logical.* If TRUE, ntervals between FlyBase access for each bundle as seconds. Default = 0.
 - convert.into: *"genes", "transcripts", or "polypeptides".* "g", "t", or "p" is also possible. 
   If missing, the IDs will be updated to the most recent IDs only.
-```
+
 
 Examples
 ```
@@ -52,13 +52,13 @@ id.converter2(x, version, thread = 1)
 ```
 
 Arguments
-```
+
 - x: *a vector.* FlyBase IDs.
 - version: FlyBase ID version for the updated result. 
   It should be either version numbers (e.g. 6.12) or FlyBase Release Numbers (e.g. FB2017_04). The default is "current".
 - thread: *Numeric.* The function itself is slow, so in order to speed up you can use multiple CPU threads for parallelization. 
   Default : thread = 1.
-```
+
 
 Examples
 ```
@@ -80,10 +80,10 @@ j2g(x, n = 10)
 ```
 Arguments
 
-```
+
 - x: *a character or vector.* FlyBase IDs or symbols.
 - n: The maximum number of genes to be opened. Default = 10.
-```
+
 
 Examples
 ```
