@@ -16,15 +16,21 @@ Usage
 ```
 id.converter(x, symbols = F, bundle.size = 1000, DmelOnly = T, polite.access = 0, diehard.symbols = F, convert.into)
 Arguments
-
-x	- a vector. FlyBase IDs or names to be converted.
-symbols	-Logical. If TRUE, the output will be gene symbols, rather than FlyBase IDs. Default = F
-bundle.size	- Numeric. The number of FlyBase IDs or symbols to be submitted to FlyBase at once. Default is 1,000 if there are less than 100 symbols; 100 if more than 1,000 symbols. Reduce the number down if Timeout error occurs.
-DmelOnly - Logical. If TRUE, non-melanogaster gene IDs will be ignored. Default = T.
-polite.access - Numeric. Intervals between FlyBase access for each bundle as seconds. Default = 0.
-diehard.symbols- Logical. If TRUE, ntervals between FlyBase access for each bundle as seconds. Default = 0.
-convert.into - "genes", "transcripts", or "polypeptides". "g", "t", or "p" is also possible. If missing, the IDs will be updated to the most recent IDs only.
 ```
+x
+> a vector. FlyBase IDs or names to be converted.
+symbols
+> Logical. If TRUE, the output will be gene symbols, rather than FlyBase IDs. Default = F
+bundle.size
+> Numeric. The number of FlyBase IDs or symbols to be submitted to FlyBase at once. Default is 1,000 if there are less than 100 symbols; 100 if more than 1,000 symbols. Reduce the number down if Timeout error occurs.
+DmelOnly
+> Logical. If TRUE, non-melanogaster gene IDs will be ignored. Default = T.
+polite.access
+> Numeric. Intervals between FlyBase access for each bundle as seconds. Default = 0.
+diehard.symbols
+> Logical. If TRUE, ntervals between FlyBase access for each bundle as seconds. Default = 0.
+convert.into
+> "genes", "transcripts", or "polypeptides". "g", "t", or "p" is also possible. If missing, the IDs will be updated to the most recent IDs only.
 
 Examples
 ```
