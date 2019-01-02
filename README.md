@@ -34,7 +34,7 @@ Arguments
 Examples
 ```
 id.converter(x, symbols = T)
-id.converter(x, bundle.size = 50, be.polite = 10, convert.into = "transcripts")
+id.converter(x, bundle.size = 50, polite.access = 10, convert.into = "transcripts")
 id.converter(x, symbols = T, bundle.size = 50, diehard.symbols = T)
 ```
 
@@ -44,7 +44,7 @@ Updating FlyBase IDs to a certain version.
 
 Description
 
-The function takes FlyBase IDs (e.g. FBgn#######) as an input, and converts it into certain versions of IDs. This function is not able to handle gene symbols. The function accesses the FlyBase FTP site, so requires internet-connection. FlyBase IDs for genes that are split into multiple genes will be concatenated with two colons (::). Genes that does not have matching IDs will be shown as "unknown".
+The function takes FlyBase IDs (e.g. FBgn0000003) as an input, and converts it into certain versions of IDs. This function is not able to handle gene symbols. The function accesses the FlyBase FTP site, so requires internet-connection. FlyBase IDs for genes that are split into multiple genes will be concatenated with two colons (::). Genes that does not have matching IDs will be shown as "unknown".
 
 Usage
 ```
@@ -72,7 +72,7 @@ Open FlyBase gene reports using a web browser
 
 Description
 
-The function takes FlyBase IDs (e.g. FBgn#######) or Gene symbols as an input, and opens FlyBase gene report from the default web browser (e.g. Jump2Gene).
+The function takes FlyBase IDs (e.g. FBgn0000003) or Gene symbols as an input, and opens FlyBase gene report from the default web browser (e.g. Jump2Gene).
 
 Usage
 ```
