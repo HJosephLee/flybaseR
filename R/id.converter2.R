@@ -80,8 +80,8 @@ id.converter2 <- function(x, version, thread){
       
       if (thread == 1){
             temp.x <- as.character(x)
-            temp.x[ which(temp.x %in% conversion.table$V2 == F) ] <-  sapply(temp.x[ temp.x %in% conversion.table$V2 == F ], 
-                                                                             function(y){ paste(conversion.table[ grepl(y, conversion.table$V3, fixed = T), 2], collapse = "::") }, simplify = T, USE.NAMES = F) # So, if a gene ID became splitted, then conmessageenate the names.
+            temp.x[ which(temp.x %in% conversion.table$V3 == F) ] <-  sapply(temp.x[ temp.x %in% conversion.table$V3 == F ], 
+                                                                             function(y){ paste(conversion.table[ grepl(y, conversion.table$V4, fixed = T), 3], collapse = "::") }, simplify = T, USE.NAMES = F) # So, if a gene ID became splitted, then conmessageenate the names.
             
       } else {
             
@@ -92,8 +92,8 @@ id.converter2 <- function(x, version, thread){
             
             clusters <- makeCluster(thread)
             temp.x <- as.character(x)
-            temp.x[ which(temp.x %in% conversion.table$V2 == F) ] <-  parSapply(clusters, temp.x[ temp.x %in% conversion.table$V2 == F ], 
-                                                                                function(y){ paste(conversion.table[ grepl(y, conversion.table$V3, fixed = T), 2], collapse = "::") }, simplify = T, USE.NAMES = F) # So, if a gene ID became splitted, then conmessageenate the names.
+            temp.x[ which(temp.x %in% conversion.table$V3 == F) ] <-  parSapply(clusters, temp.x[ temp.x %in% conversion.table$V3 == F ], 
+                                                                                function(y){ paste(conversion.table[ grepl(y, conversion.table$V4, fixed = T), 3], collapse = "::") }, simplify = T, USE.NAMES = F) # So, if a gene ID became splitted, then conmessageenate the names.
 
             stopCluster(clusters)
             
