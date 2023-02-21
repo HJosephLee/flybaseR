@@ -116,7 +116,7 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
             }
             
             if ( symbols == F ){
-                  temp.result <- sapply(as.character(temp.x), function(y){ paste(conversion.table[ y == conversion.table$submitted, 3], collapse = "::") }, simplify = T, USE.NAMES = F)
+                  temp.result <- sapply(as.character(temp.x), function(y){ paste(conversion.table[ y == conversion.table$submitted, 2], collapse = "::") }, simplify = T, USE.NAMES = F)
             } else {
                   temp.result <- sapply(as.character(temp.x), function(y){ paste(conversion.table[ y == conversion.table$submitted, 4], collapse = "::") }, simplify = T, USE.NAMES = F)
             }
