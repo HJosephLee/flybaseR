@@ -3,21 +3,20 @@
 #' The function takes FlyBase IDs (e.g. FBgn0000003) or Gene symbols as an input, and converts it into updated IDs or symbols using the FlyBase ID converter (web).
 #' The function accesses FlyBase, so requires internet-connection.  FlyBase ID inputs are bundled as 1,000.  100 for symbols.
 #' FlyBase IDs for genes that are split into multiple genes will be concatenated with two colons (::).  Genes that does not have matching IDs will be shown as "unknown".
-#' Certain gene symbols would appear as "unknown" even if the gene exists, and have FlyBase IDs. This is because the ID converter in FlyBase website cannot convert the gene.  For example, CG31976 cannot be converted by FlyBase, although you can find the gene from the gene report.  
-#' Setting diehard.symbols = T will look for gene report pages of such unconvertible genes one by one.  The process is essentially slow because it accesses FlyBase for each gene. 
+#' Certain gene symbols would appear as "unknown" even if the gene exists, and have FlyBase IDs. This is because the ID converter in FlyBase website cannot convert the gene.  For example, CG31976 cannot be converted by FlyBase, although you can find the gene from the gene report.  Setting diehard.symbols = T will look for gene report pages of such unconvertible genes one by one.  The process is essentially slow because it accesses FlyBase for each gene. 
 
 #' @param x a vector. FlyBase IDs or names to be converted.
 #' @param symbols Logical.  If TRUE, the output will be gene symbols, rather than FlyBase IDs.  Default = F
 #' @param bundle.size Numeric.  The number of FlyBase IDs or symbols to be submitted to FlyBase at once. Default is 1,000 if there are less than 100 symbols; 100 if more than 1,000 symbols.  Reduce the number down if Timeout error occurs.
 #' @param DmelOnly Logical.  If TRUE, non-melanogaster gene IDs will be ignored.  Default = T.
 #' @param polite.access Numeric.  Intervals between FlyBase access for each bundle as seconds.  Default = 0.
-#' @param diehard.symbols Logical.  If TRUE, gene symbols that are not automatically converted by the FlyBase ID converter, will be searched from gene reports to find out the most matching genes.  Default = F.
-#' @param convert.into "genes", "transcripts", or "polypeptides". "g", "t", or "p" is also possible. If missing, inputs will be updated to the most recent IDs only.
+#' @param diehard.symbols Logical.  If TRUE, ntervals between FlyBase access for each bundle as seconds.  Default = 0.
+#' @param convert.into "genes", "transcripts", or "polypeptides". "g", "t", or "p" is also possible. If missing, the IDs will be updated to the most recent IDs only.
 #' @keywords flybase
 #' @export
 #' @examples
 #' id.converter(x, symbols = T)
-#' id.converter(x, bundle.size = 50, polite.access = 10, convert.into = "transcripts")
+#' id.converter(x, bundle.size = 50, be.polite = 10, convert.into = "transcripts")
 #' id.converter(x, symbols = T, bundle.size = 50, diehard.symbols = T)
 
 
@@ -33,7 +32,10 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
    
    require(rvest)
    require(httr)
-      
+   
+   # overriding the user agent/browser issue
+   ua.info <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36" 
+   
       #######################################################
       # Handling arguments, or assigning default arguments.
       #######################################################
@@ -74,7 +76,6 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
       # ID conversion to the current FBIDs or symbols
       #################################################
       
-      ua.info <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36" # overriding user agent. 
       session <- session("https://flybase.org/convert/id", user_agent(ua.info))
       form.original <- html_form(session)[[2]]
       
@@ -88,22 +89,22 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
             message(paste("Processing ", prettyNum(min((bundle.size*i), length(x)), big.mark=",", big.interval=3), " genes out of ", prettyNum(length(x), big.mark=",", big.interval=3), sep=""))
             
             if ( missing(convert.into) | toupper(convert.into) %in% c( "G", "GENE", "GENES", "T", "TRANSCRIPT", "TRANSCRIPTS", "RNA", "P", "POLYPEPTIDE", "POLYPEPTIDES", "PROTEIN", "PROTEINS" ) == F ){
-                  form <- set_values(form.original, ids = paste(as.character(temp.x), collapse = "\n"))
+                  form <- html_form_set(form.original, ids = paste(as.character(temp.x), collapse = "\n"), synonyms = TRU)
             } else {
                   if ( toupper(convert.into) %in% c( "G", "GENE", "GENES" ) ){
-                        form <- set_values(form.original, ids = paste(as.character(temp.x), collapse = "\n"), mode = "convert", convert = "fbgn")
+                        form <- html_form_set(form.original, ids = paste(as.character(temp.x), collapse = "\n"), synonyms = TRUE)
                   }
                   if ( toupper(convert.into) %in% c( "T", "TRANSCRIPT", "TRANSCRIPTS", "RNA" ) ){
-                        form <- set_values(form.original, ids = paste(as.character(temp.x), collapse = "\n"), mode = "convert", convert = "fbtr")
+                        form <- html_form_set(form.original, ids = paste(as.character(temp.x), collapse = "\n"), synonyms = TRUE)
                   }
                   if ( toupper(convert.into) %in% c( "P", "POLYPEPTIDE", "POLYPEPTIDES", "PROTEIN", "PROTEINS" )){
-                        form <- set_values(form.original, ids = paste(as.character(temp.x), collapse = "\n"), mode = "convert", convert = "fbpp")
+                        form <- html_form_set(form.original, ids = paste(as.character(temp.x), collapse = "\n"), synonyms = TRUE)
                   }
             }
             
             
-            conversion.table <- html_table(suppressMessages(submit_form(session, form)))[[1]]
-            conversion.table <- conversion.table[-1, ]
+            conversion.table <- html_table(suppressMessages(session_submit(session, form)), header=T)[[1]]
+            conversion.table <- as.data.frame(conversion.table[-c(1,2), -1]) 
             colnames(conversion.table) <- c("submitted", "current", "converted", "symbols")
             conversion.table$submitted <- gsub(" - unknown ID", "", conversion.table$submitted, fixed=T)
             conversion.table$converted <- gsub("^.+ - unknown ID", "unknown", conversion.table$converted, perl=T)
@@ -144,7 +145,7 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
             form2 <- html_form(session2)[[1]]
             
             for (j in 1:nrow(temp.df)){
-                  temp.df[j, 2] <- suppressMessages(submit_form(session2, set_values(form2, context = temp.df[j,1])))$url
+                  temp.df[j, 2] <- suppressMessages(session_submit(session2, html_form_set(form2, context = temp.df[j,1])))$url
                   
                   if ( j %% 10 == 0 | j == nrow(temp.df)){
                         message(paste("Processing ", prettyNum(j, big.mark=",", big.interval=3), " genes out of ", prettyNum(nrow(temp.df), big.mark=",", big.interval=3), sep=""))
@@ -167,9 +168,9 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
             } else {
                   
                   form3 <- html_form(session)[[2]]
-                  form3 <- set_values(form3, ids = paste(temp.df$id, collapse = "\n"))
-                  conversion.table2 <- html_table(suppressMessages(submit_form(session, form3)))[[1]]
-                  conversion.table2 <- conversion.table2[-1, ]
+                  form3 <- html_form_set(form3, ids = paste(temp.df$id, collapse = "\n"), synonyms = TRU)
+                  conversion.table2 <- html_table(suppressMessages(session_submit(session, form3)))[[1]]
+                  conversion.table2 <- as.data.frame(conversion.table2[-c(1,2), -1]) 
                   colnames(conversion.table2) <- c("submitted", "current", "converted", "symbols")
                   conversion.table2$submitted <- gsub(" - unknown ID", "", conversion.table2$submitted, fixed=T)
                   conversion.table2$converted <- gsub("^.+ - unknown ID", "unknown", conversion.table2$converted, perl=T)
