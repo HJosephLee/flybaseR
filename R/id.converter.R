@@ -104,7 +104,7 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
             
             
             conversion.table <- html_table(suppressMessages(session_submit(session, form)), header=T)[[1]]
-            conversion.table <- as.data.frame(conversion.table[-c(1,2), -1]) 
+            conversion.table <- as.data.frame(conversion.table[-1, -1]) 
             colnames(conversion.table) <- c("submitted", "current", "converted", "symbols")
             conversion.table$submitted <- gsub(" - unknown ID", "", conversion.table$submitted, fixed=T)
             conversion.table$converted <- gsub("^.+ - unknown ID", "unknown", conversion.table$converted, perl=T)
@@ -170,7 +170,7 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
                   form3 <- html_form(session)[[2]]
                   form3 <- html_form_set(form3, ids = paste(temp.df$id, collapse = "\n"), synonyms = TRU)
                   conversion.table2 <- html_table(suppressMessages(session_submit(session, form3)))[[1]]
-                  conversion.table2 <- as.data.frame(conversion.table2[-c(1,2), -1]) 
+                  conversion.table2 <- as.data.frame(conversion.table2[-1, -1]) 
                   colnames(conversion.table2) <- c("submitted", "current", "converted", "symbols")
                   conversion.table2$submitted <- gsub(" - unknown ID", "", conversion.table2$submitted, fixed=T)
                   conversion.table2$converted <- gsub("^.+ - unknown ID", "unknown", conversion.table2$converted, perl=T)
@@ -203,3 +203,5 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
       return(result)
       
 }
+
+
