@@ -89,7 +89,7 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
             message(paste("Processing ", prettyNum(min((bundle.size*i), length(x)), big.mark=",", big.interval=3), " genes out of ", prettyNum(length(x), big.mark=",", big.interval=3), sep=""))
             
             if ( missing(convert.into) | toupper(convert.into) %in% c( "G", "GENE", "GENES", "T", "TRANSCRIPT", "TRANSCRIPTS", "RNA", "P", "POLYPEPTIDE", "POLYPEPTIDES", "PROTEIN", "PROTEINS" ) == F ){
-                  form <- html_form_set(form.original, ids = paste(as.character(temp.x), collapse = "\n"), synonyms = TRU)
+                  form <- html_form_set(form.original, ids = paste(as.character(temp.x), collapse = "\n"), synonyms = TRUE)
             } else {
                   if ( toupper(convert.into) %in% c( "G", "GENE", "GENES" ) ){
                         form <- html_form_set(form.original, ids = paste(as.character(temp.x), collapse = "\n"), synonyms = TRUE)
