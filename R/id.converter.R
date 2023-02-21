@@ -23,11 +23,16 @@
 
 id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, diehard.symbols, convert.into){
       
-      if ( !requireNamespace("rvest", quietly = T) ) {
-            stop("'rvest' package should be installed.", call. = F)
-      }
-      
-      require(rvest)
+   if ( !requireNamespace("rvest", quietly = T) ) {
+      stop("'rvest' package should be installed.", call. = F)
+   }
+   
+   if ( !requireNamespace("httr", quietly = T) ) {
+      stop("'httr' package should be installed.", call. = F)
+   }
+   
+   require(rvest)
+   require(httr)
       
       #######################################################
       # Handling arguments, or assigning default arguments.
@@ -38,7 +43,7 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
       }
       
       if ( missing(symbols) ){
-            symbols <- F
+            symbols <- FALSE
       } 
       
       if (symbols == F){
@@ -69,7 +74,8 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
       # ID conversion to the current FBIDs or symbols
       #################################################
       
-      session <- html_session("http://flybase.org/convert/id")
+      ua.info <- "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36" # overriding user agent. 
+      session <- session("https://flybase.org/convert/id", user_agent(ua.info))
       form.original <- html_form(session)[[2]]
       
       for (i in 1:ceiling(length(x)/bundle.size)){
@@ -134,7 +140,7 @@ id.converter <- function(x, symbols, bundle.size, DmelOnly, polite.access, dieha
             message("Checking FlyBase gene reports for genes that are not converted by the FlyBase ID converter.  This process is very slow and takes a long time!")
             temp.df <- data.frame( symbols = x[ which(result == "unknown")], id = NA, newsymbols = NA, stringsAsFactors = F)
             
-            session2 <- html_session("http://flybase.org")
+            session2 <- session("http://flybase.org", user_agent(ua.info))
             form2 <- html_form(session2)[[1]]
             
             for (j in 1:nrow(temp.df)){
