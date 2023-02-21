@@ -1,3 +1,7 @@
+# Disclaimer
+
+This package was written when I was in Dr. Brian Oliver's group (NIDDK/NIH) for my colleagues. This is NOT an official package made by FlyBase (I may have to change the package name?). It seems that FlyBase started its API; please check it out (https://flybase.github.io/)
+
 # to install
 
 ```
